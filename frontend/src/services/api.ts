@@ -122,7 +122,10 @@ export interface SearchResult {
   category: string
 }
 
-const BASE = '/api'
+// On Android (Capacitor) we can't use the Vite proxy — hit the backend directly.
+// Set VITE_API_URL=http://<your-server-ip>:8000 before building for Android.
+// On web (dev) the Vite proxy rewrites /api → http://localhost:8000.
+const BASE = (import.meta.env.VITE_API_URL ?? '') + '/api'
 
 export async function analyzeSymbol(symbol: string, timeframe: string): Promise<AnalysisResponse> {
   const res = await fetch(`${BASE}/analyze?symbol=${encodeURIComponent(symbol)}&timeframe=${timeframe}`)
